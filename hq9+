@@ -1,0 +1,64 @@
+#!/usr/bin/env ruby
+# HQ9++ is an object-oriented extension of the well-known esoteric language
+# HQ9+, created by Cliff L. Biffle.
+#
+# From: http://www.dangermouse.net/esoteric/hq9plusplus.html
+#
+# Commands
+#
+# * H
+#   Prints "Hello, world!".
+# * Q
+#   Prints the entire text of the source code file.
+# * 9
+#   Prints the complete canonical lyrics to "99 Bottles of Beer on the Wall".
+# * +
+#   Increments the accumulator.
+# * ++
+#   When the sequence ++ is encountered, it (naturally) increments the
+#   accumulator twice, and also instantiates an object of a new subclass of the
+#   generic superclass. In line with the best data-hiding principles, there is
+#   no way to access this object. 
+
+plusplus = true
+source = gets
+
+def beer(n)
+  if n == 1 
+    puts "1 bottle of beer on the wall"
+    puts "1 bottle of beer"
+    puts "Take one down and pass it around"
+    puts "No bottles of beer on the wall"
+  else 
+    puts "#{n} bottles of beer on the wall"
+    puts "#{n} bottles of beer"
+    puts "Take one down and pass it around"
+    puts "#{n-1} bottles of beer on the wall"
+    puts
+    beer(n-1)
+  end
+end
+
+accumulator = 0
+last_instruction = nil
+objects = []
+
+source.split(//).each do |instruction|
+  case instruction 
+  when "H"
+    puts "Hello world!"
+  when "Q"
+    puts source
+  when "9"
+    beer(99)
+  when "+"
+    accumulator += 1
+    if plusplus && last_instruction == "+"
+      objects << Class.new.new
+    end
+  when "\n", " " 
+  else
+    die "Syntax error"
+  end 
+  last_instruction = instruction
+end
